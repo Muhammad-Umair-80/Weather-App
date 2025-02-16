@@ -65,14 +65,29 @@ body{
     font-weight: 400;
     margin-top: -10px;
 }
-.details{
+/* .details{
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 30px;
     margin-top: 50px;
-    
+    gap: 20px; 
+} */
+ .details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    margin-top: 50px;
+    gap: 50px; 
 }
+
+
+.details > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;}
+
 .col{
     display: flex;
     align-items: center;
