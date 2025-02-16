@@ -36,10 +36,12 @@
 
     <script>
         const apikey = "cc0cf775d96ee9ab063857e35ac7741e";
-        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=Peshawar"
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");  
 
-        async function checkWeather(){
-            const response = await fetch(apiurl + `&appid=${apikey}`);
+        async function checkWeather(city){
+            const response = await fetch(apiurl + city + `&appid=${apikey}`);
             var data = await response.json();
 
             console.log(data);
@@ -51,7 +53,11 @@
 
         }
 
-        checkWeather();
+        searchBtn.addEventListener("click", ()=>{
+            checkWeather(searchBox.value);
+        });
+
+        
     </script>
 </body>
 </html>
