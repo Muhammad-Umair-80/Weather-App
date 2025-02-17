@@ -22,7 +22,7 @@ A simple and interactive Weather App built using **HTML, CSS, and JavaScript**. 
 ## 🔧 Setup & Usage
 1. Clone the repository:
    ```bash
-   git clone https://github.com/muhammadumair/Weather-App.git
+   git clone https://github.com/muhammadumair-417/Weather-App.git
    ```
 2. Navigate to the project folder:
    ```bash
