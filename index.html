@@ -36,28 +36,58 @@
 
     <script>
         const apikey = "cc0cf775d96ee9ab063857e35ac7741e";
-        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
         const searchBox = document.querySelector(".search input");
         const searchBtn = document.querySelector(".search button");  
-
-        async function checkWeather(city){
-            const response = await fetch(apiurl + city + `&appid=${apikey}`);
-            var data = await response.json();
-
-            console.log(data);
-
-            document.querySelector(".city").innerHTML=data.name;
-            document.querySelector(".temp").innerHTML=Math.round(data.main.temp)  + "°C";
-            document.querySelector(".humidity").innerHTML=data.main.humidity + "%";
-            document.querySelector(".wind").innerHTML=data.wind.speed + "Km/h";
-
+        const weatherIcon = document.querySelector(".weather-icon");
+    
+        async function checkWeather(city) {
+            try {
+                const response = await fetch(apiurl + city + `&appid=${apikey}`);
+                if (!response.ok) {
+                    throw new Error("City not found");
+                }
+                const data = await response.json();
+    
+                console.log(data);
+    
+                document.querySelector(".city").innerHTML = data.name;
+                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+                document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h";
+    
+                const weatherCondition = data.weather[0].main;
+    
+                if (weatherCondition === "Clouds") {
+                    weatherIcon.src = "images/clouds.png";
+                } else if (weatherCondition === "Rain") {
+                    weatherIcon.src = "images/rain.png";
+                } else if (weatherCondition === "Clear") {
+                    weatherIcon.src = "images/clear.png";
+                } else if (weatherCondition === "Snow") {
+                    weatherIcon.src = "images/snow.png";
+                } else if (weatherCondition === "Drizzle") {
+                    weatherIcon.src = "images/drizzle.png";
+                } else if (weatherCondition === "Mist") {  // Corrected Mist case
+                    weatherIcon.src = "images/mist.png";
+                } else {
+                    weatherIcon.src = "images/default.png"; // Fallback image
+                }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                alert("City not found. Please try again.");
+            }
         }
-
-        searchBtn.addEventListener("click", ()=>{
-            checkWeather(searchBox.value);
+    
+        searchBtn.addEventListener("click", () => {
+            const city = searchBox.value.trim();
+            if (city) {
+                checkWeather(city);
+            } else {
+                alert("Please enter a city name.");
+            }
         });
-
-        
     </script>
+    
 </body>
 </html>
