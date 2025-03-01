@@ -1,4 +1,4 @@
-# Weather App
+# Weather website
 
 A simple and interactive Weather App built using **HTML, CSS, and JavaScript**. This app fetches real-time weather data from the **OpenWeatherMap API** and displays key weather details such as:
 
@@ -40,7 +40,7 @@ This project uses the **OpenWeatherMap API** to fetch weather data. To use it:
 
 
 ## 🤝 Contributing
-Pull requests are welcome! Feel free to contribute to enhance the app.
+Pull requests are welcome! Feel free to contribute to enhance the website structure.
 
 ## 📜 License
 This project is open-source and available under the **MIT License**.
