@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="card">
@@ -17,6 +18,9 @@
             <img src="images/default.png" alt="Weather Icon" class="weather-icon">
             <h1 class="temp">--°C</h1>
             <h2 class="city">City</h2>
+            <p class="description">--</p>
+            <p class="feels-like">Feels like: --°C</p>
+            <p class="datetime">--</p>
 
             <div class="details">
                 <div class="col">
@@ -35,9 +39,14 @@
                     </div>
                 </div>
             </div>
+
+            <div class="extras">
+                <p class="sunrise">Sunrise: --</p>
+                <p class="sunset">Sunset: --</p>
+            </div>
         </div>
 
-        <pp class="error">City not found. Please try again.</p>
+        <p class="error">City not found. Please try again.</p>
     </div>
 
     <script>
@@ -49,20 +58,33 @@
         const weatherIcon = document.querySelector(".weather-icon");
         const errorMsg = document.querySelector(".error");
 
+        function formatTime(unixTime, timezone) {
+            return new Date((unixTime + timezone) * 1000).toUTCString().match(/\d{2}:\d{2}/)[0];
+        }
+
         async function checkWeather(city) {
             try {
                 const response = await fetch(apiurl + city + `&appid=${apikey}`);
-                if (!response.ok) {
-                    throw new Error("City not found");
-                }
+                if (!response.ok) throw new Error("City not found");
                 const data = await response.json();
 
-                document.querySelector(".city").innerHTML = data.name;
-                document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
-                document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-                document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h";
+                const { temp, humidity, feels_like } = data.main;
+                const { speed } = data.wind;
+                const { main, description } = data.weather[0];
+                const { sunrise, sunset } = data.sys;
+                const timezone = data.timezone;
+                const datetime = new Date((data.dt + timezone) * 1000).toUTCString();
 
-                const weatherCondition = data.weather[0].main;
+                document.querySelector(".city").textContent = data.name;
+                document.querySelector(".temp").textContent = Math.round(temp) + "°C";
+                document.querySelector(".humidity").textContent = humidity + "%";
+                document.querySelector(".wind").textContent = speed + " Km/h";
+                document.querySelector(".description").textContent = description.charAt(0).toUpperCase() + description.slice(1);
+                document.querySelector(".feels-like").textContent = "Feels like: " + Math.round(feels_like) + "°C";
+                document.querySelector(".sunrise").textContent = "Sunrise: " + formatTime(sunrise, timezone);
+                document.querySelector(".sunset").textContent = "Sunset: " + formatTime(sunset, timezone);
+                document.querySelector(".datetime").textContent = "Local Time: " + datetime;
+
                 const weatherImages = {
                     "Clouds": "images/clouds.png",
                     "Rain": "images/rain.png",
@@ -72,7 +94,7 @@
                     "Mist": "images/mist.png"
                 };
 
-                weatherIcon.src = weatherImages[weatherCondition] || "images/default.png";
+                weatherIcon.src = weatherImages[main] || "images/default.png";
 
                 weatherDiv.style.display = "block";
                 errorMsg.style.display = "none";
